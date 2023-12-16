@@ -33,6 +33,7 @@ for searchIDS in equitySearchIDs:
     response = requests.get(compeleteAPIURL)
     data = response.json()
     result = indianEquityDetails.insert_one(data)
-    print(searchIDS)
+    if response.status_code != 200:
+        print(compeleteAPIURL)       
 
 print('Data Updated')
