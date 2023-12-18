@@ -26,14 +26,19 @@ equityCollectionData = equityCollection.find({})
 for document in equityCollectionData:
     equitySearchIDs.append(document['search_id'])
 
-indianEquityDetails.drop()
-
+dataToInsert=[]
 for searchIDS in equitySearchIDs:
     compeleteAPIURL = startOfUrl + searchIDS + endOfUrl
     response = requests.get(compeleteAPIURL)
     data = response.json()
-    result = indianEquityDetails.insert_one(data)
+    dataToInsert.append(data)
     if response.status_code != 200:
         print(compeleteAPIURL)       
 
+
+
+
+indianEquityDetails.drop()
+indianEquityDetails.insert_many(dataToInsert)
 print('Data Updated')
+client.close()

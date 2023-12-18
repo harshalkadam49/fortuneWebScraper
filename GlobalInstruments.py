@@ -18,11 +18,13 @@ data = response.json()
 
 
 aggregatedGlobalInstrumentDto = data['aggregatedGlobalInstrumentDto']
-collection.drop()
+dataToInsert = []
 
 for i in aggregatedGlobalInstrumentDto:
-    result = collection.insert_one(i)
-
-
+    dataToInsert.append(i)   
+    
+    
+collection.drop()
+collection.insert_many(dataToInsert)
+print('Data Updated')
 client.close()
-print("Data Updated")

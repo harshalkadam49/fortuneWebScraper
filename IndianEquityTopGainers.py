@@ -14,16 +14,21 @@ db = client.fortunewebapp
 collection = db.IndianEquityTopGainersNew
 API_URL ='https://groww.in/v1/api/stocks_data/explore/v2/indices/GIDXNIFTY500/market_trends?discovery_filter_types=TOP_GAINERS&size=30'
 
-collection.drop()
 response = requests.get(API_URL)
 data = response.json()
 itemsArray = data['categoryResponseMap']['TOP_GAINERS']['items']
 
+dataToInsert=[]
 for i in itemsArray:
-    result = collection.insert_one(i)
+    dataToInsert.append(i)
+    
+    
 
+
+collection.drop()
+collection.insert_many(dataToInsert)
+print('Data Updated')
 client.close()
-print("Data Updated")
 
 
 

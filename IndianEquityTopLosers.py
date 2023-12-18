@@ -19,11 +19,15 @@ response = requests.get(API_URL)
 data = response.json()
 itemsArray = data['categoryResponseMap']['TOP_LOSERS']['items']
 
+dataToInsert=[]
 for i in itemsArray:
-    result = collection.insert_one(i)
+    dataToInsert.append(i)
 
+collection.drop()
+collection.insert_many(dataToInsert)
+print('Data Updated')
 client.close()
-print("Data Updated")
+
 
 
 

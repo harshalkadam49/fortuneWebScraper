@@ -25,7 +25,7 @@ startOfUrl = "https://groww.in/v1/api/data/mf/web/v2/scheme/search/"
 endOfUrl = "?include_swp_frequency=false"
 
 
-collection.drop()
+dataToInsert=[]
 
 for fundNames in allMFFundNames:
     compeleteAPIURL = startOfUrl + fundNames + endOfUrl
@@ -80,11 +80,13 @@ for fundNames in allMFFundNames:
         "nav_date":data["nav_date"],
         'holdings':data["holdings"]
         }
-    result = collection.insert_one(newModel)
+    dataToInsert.append(newModel)
 
 
+collection.drop()
+collection.insert_many(dataToInsert)
+print('Data Updated')
 client.close()
-print("Data Updated")
 
 
 

@@ -1,4 +1,5 @@
 # DO NOT EDIT
+from operator import truediv
 import requests
 import json
 import pymongo
@@ -23,21 +24,30 @@ FortuneEquityMaster = db.FortuneEquityMaster
 EquityLivePrices = db.EquityLivePrices
 
 
-FortuneEquityMaster = FortuneEquityMaster.find({})
+FortuneEquityMaster = FortuneEquityMaster.find({"isActive":1})
 
 for document in FortuneEquityMaster:
     equitySymbols.append(document['Symbol'])
     # print(document['Symbol'])
 
-EquityLivePrices.drop()
+
+dataToInsert = []
 
 for symbol in equitySymbols:
     compeleteAPIURL = startOfUrl + symbol + endOfUrl
     response = requests.get(compeleteAPIURL)
     data = response.json()
-    result = EquityLivePrices.insert_one(data)
-    print(symbol)
+    dataToInsert.append(data)
+    
+EquityLivePrices.drop()
+EquityLivePrices.insert_many(dataToInsert)
 print('Data Updated')
+client.close()
+
+
+
+
+
 
 
 
